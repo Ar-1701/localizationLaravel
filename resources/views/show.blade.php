@@ -99,8 +99,7 @@
             <div class="col-md-2">
                 <form>
                     @csrf
-                    <select class="form-select" id='lang' name="lang" aria-label="Default select example"
-                        onchange="langs()">
+                    <select class="form-select" id='lang' name="lang" onchange="langs()">
                         @foreach ($lang as $lang)
                             @if (Session::get('lang') == $lang->lang)
                                 <option selected value="{{ $lang->lang }}">{{ $lang->lang }}</option>
@@ -144,9 +143,8 @@
         function langs() {
             var lang = $("#lang").val();
             $.ajax({
-                url: "{{ url('/') }}/" + lang,
-                lang,
-                type: "get",
+                url: "{{ url('langs') }}",
+                type: "post",
                 data: {
                     lang: lang,
                     _token: "{{ @csrf_token() }}"

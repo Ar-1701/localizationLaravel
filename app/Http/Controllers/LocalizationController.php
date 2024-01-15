@@ -51,24 +51,24 @@ class LocalizationController extends Controller
         }
         echo "save";
     }
-    // public function lang(Request $req)
-    // {
-    //     $langId = $req->lang;
-    //     $lang = Language::find($langId);
-    //     App::setLocale($lang->lang);
-    //     // app()->setLocale($lang->lang);
-    //     echo $locale = App::currentLocale();
-    //     // if (App::isLocale($locale)) {
-    //     //     echo "hiiii";
-    //     //     app()->setLocale($locale);
-    //     // } else {
-    //     //     echo "bye";
-    //     //     app()->setLocale($locale);
-    //     // }
-    //     Session::put('langId', $langId);
-    //     Session::put('lang', $lang->lang);
-    //     // return redirect()->back();
-    // }
+    public function lang(Request $req)
+    {
+        $langId = $req->lang;
+        $lang = Language::find($langId);
+        App::setLocale($lang->lang);
+        // app()->setLocale($lang->lang);
+        echo $locale = App::currentLocale();
+        // if (App::isLocale($locale)) {
+        //     echo "hiiii";
+        //     app()->setLocale($locale);
+        // } else {
+        //     echo "bye";
+        //     app()->setLocale($locale);
+        // }
+        Session::put('langId', $langId);
+        Session::put('lang', $lang->lang);
+        // return redirect()->back();
+    }
     // public function greeting(Request $req)
     // {
     //     // die;
