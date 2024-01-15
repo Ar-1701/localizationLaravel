@@ -18,14 +18,14 @@ use App\Models\Post;
 */
 
 Route::controller(LocalizationController::class)->group(function () {
-    Route::get("/", "index");
+    // Route::get("/", "index");
     Route::get("/dddd/{id}", "ddd");
     Route::get("add_post", "add_post");
     Route::post('langs', 'lang');
-    Route::get('greeting', 'greeting');
+    // Route::post('greeting', 'greeting')->name('greeting');
     Route::post('save_post', 'save_post');
 });
-Route::get('/greeting/{locale}', function ($locale) {
+Route::get('/{locale}', function ($locale) {
     App::setLocale($locale);
     $l = Language::where('lang', App::getLocale())->first();
     $data['lang'] = Language::all();

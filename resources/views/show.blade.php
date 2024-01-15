@@ -97,8 +97,9 @@
                 <a href="{{ url('add_post') }}" class="btn btn-primary">Add Post</a>
             </div>
             <div class="col-md-2">
-                <form action="/greeting/{locale}" method="get">
-                    <select class="form-select" id='lang' name="locale" aria-label="Default select example"
+                <form>
+                    @csrf
+                    <select class="form-select" id='lang' name="lang" aria-label="Default select example"
                         onchange="langs()">
                         @foreach ($lang as $lang)
                             @if (Session::get('lang') == $lang->lang)
@@ -143,7 +144,8 @@
         function langs() {
             var lang = $("#lang").val();
             $.ajax({
-                url: "{{ url('greeting') }}",
+                url: "{{ url('/') }}/" + lang,
+                lang,
                 type: "get",
                 data: {
                     lang: lang,

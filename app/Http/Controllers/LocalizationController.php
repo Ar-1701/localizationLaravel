@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Session;
 
 class LocalizationController extends Controller
 {
-    public function index()
-    {
-        echo $locale = App::currentLocale();
-        $langId = Session::get('langId');
-        $data['lang'] = Language::all();
-        $data['post'] = Post::whereRaw('lang_id=?', $langId)->get();
-        return view('show', $data);
-    }
+    // public function index()
+    // {
+    //     echo $locale = App::currentLocale();
+    //     $langId = Session::get('langId');
+    //     $data['lang'] = Language::all();
+    //     $data['post'] = Post::whereRaw('lang_id=?', $langId)->get();
+    //     return view('show', $data);
+    // }
     public function add_post()
     {
         Session::forget('langId');
@@ -69,17 +69,16 @@ class LocalizationController extends Controller
     //     Session::put('lang', $lang->lang);
     //     // return redirect()->back();
     // }
-    public function greeting(Request $req)
-    {
-        echo $req->lang;
-        App::setLocale($req->lang);
-        echo App::getLocale();
-        // die;
-        $l = Language::where('lang', App::getLocale())->first();
-        $data['lang'] = Language::all();
-        $data['post'] = Post::whereRaw('lang_id=?', $l->id)->get();
-        Session::put('lang', $l->lang);
-        Session::put('langId', $l->id);
-        return view('show', $data);
-    }
+    // public function greeting(Request $req)
+    // {
+    //     // die;
+    //     App::setLocale($req->lang);
+    //     echo App::getLocale();
+    //     $l = Language::where('lang', App::getLocale())->first();
+    //     $data['lang'] = Language::all();
+    //     $data['post'] = Post::whereRaw('lang_id=?', $l->id)->get();
+    //     Session::put('lang', $l->lang);
+    //     Session::put('langId', $l->id);
+    //     return view('show', $data);
+    // }
 }
