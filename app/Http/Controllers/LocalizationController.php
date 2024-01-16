@@ -62,19 +62,24 @@ class LocalizationController extends Controller
         } else {
             $post_id = "P" . rand(1111, 9999);
             foreach ($req->locale as $key => $l) {
-                $language = Language::find($lang_id[$key]);
-                $lang_id = $lang_id[$key];
-                $title = $title[$key];
-                $post_cat = $post_cat[$key];
-                $post_desc = $post_desc[$key];
-                $i = new Post();
-                $i->post_id = $post_id;
-                $i->post_title = $title;
-                $i->post_cat = $post_cat;
-                $i->post_desc = $post_desc;
-                $i->post_img = $imgName;
-                $language->post()->save($i);
-                $image->move("public/upload/post", $imgName);
+                $language = Language::whereIn('id', $req->locale)->get();
+                foreach ($language as $l) {
+                    // echo "<pre>";
+                    // print_r($language);
+                    // // die;
+                    $lang_id = $lang_id[$key];
+                    $title = $title[$key];
+                    $post_cat = $post_cat[$key];
+                    $post_desc = $post_desc[$key];
+                    $i = new Post();
+                    $i->post_id = $post_id;
+                    $i->post_title = $title;
+                    $i->post_cat = $post_cat;
+                    $i->post_desc = $post_desc;
+                    $i->post_img = $imgName;
+                    $l->lang->posts()->save($i);
+                    // $image->move("public/upload/post", $imgName);
+                }
             }
             echo "save";
         }

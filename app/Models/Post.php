@@ -10,6 +10,6 @@ class Post extends Model
     use HasFactory;
     public function language()
     {
-        return $this->belongsToMany(Language::class);
+        return $this->belongsTo(Language::class);
     }
 }
