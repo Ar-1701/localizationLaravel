@@ -11,26 +11,21 @@ use Illuminate\Support\Facades\Session;
 
 class LocalizationController extends Controller
 {
-    // public function index()
-    // {
-    //     echo $locale = App::currentLocale();
-    //     $langId = Session::get('langId');
-    //     $data['lang'] = Language::all();
-    //     $data['post'] = Post::whereRaw('lang_id=?', $langId)->get();
-    //     return view('show', $data);
-    // }
+    public function index()
+    {
+        echo App::currentLocale();
+        $langId = Session::get('langId');
+        $data['lang'] = Language::all();
+        $data['post'] = Post::whereRaw('lang_id=?', $langId)->get();
+        return view('show', $data);
+    }
     public function add_post()
     {
-        Session::forget('langId');
-        Session::forget('lang');
         $data['lang'] = Language::all();
         return view('add', $data);
     }
     public function save_post(Request $req)
     {
-        // echo "<pre>";
-        // print_r($req->all());
-        // echo "</pre>";
         if ($req->hasFile('img')) {
             $image = $req->file('img');
             $imgName = time() . $image->getClientOriginalName();
@@ -53,32 +48,15 @@ class LocalizationController extends Controller
     }
     public function lang(Request $req)
     {
-        $langId = $req->lang;
+        $langId = $req->lang_id;
         $lang = Language::find($langId);
         App::setLocale($lang->lang);
-        // app()->setLocale($lang->lang);
-        echo $locale = App::currentLocale();
-        // if (App::isLocale($locale)) {
-        //     echo "hiiii";
-        //     app()->setLocale($locale);
-        // } else {
-        //     echo "bye";
-        //     app()->setLocale($locale);
-        // }
         Session::put('langId', $langId);
         Session::put('lang', $lang->lang);
-        // return redirect()->back();
     }
-    // public function greeting(Request $req)
-    // {
-    //     // die;
-    //     App::setLocale($req->lang);
-    //     echo App::getLocale();
-    //     $l = Language::where('lang', App::getLocale())->first();
-    //     $data['lang'] = Language::all();
-    //     $data['post'] = Post::whereRaw('lang_id=?', $l->id)->get();
-    //     Session::put('lang', $l->lang);
-    //     Session::put('langId', $l->id);
-    //     return view('show', $data);
-    // }
+    public function show_post()
+    {
+        $data['post'] = Post::all();
+        return view('showPost', $data);
+    }
 }

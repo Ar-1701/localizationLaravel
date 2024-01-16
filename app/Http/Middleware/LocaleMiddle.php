@@ -19,10 +19,15 @@ class LocaleMiddle
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Session::get('langId') != '') {
-            App::setLocale(Session::get('lang'));
+        $lang_id  = Session::get('langId');
+        $lang  = Session::get('lang');
+        if ($lang_id != '') {
+            App::setLocale($lang);
         } else {
-            App()->setLocale(Session::get('lang'));
+            App::setLocale(App::currentLocale());
+            $l = Language::whereRaw('lang=?', App::currentLocale())->first();
+            Session::put('langId', $l->id);
+            Session::put('lang', $l->lang);
         }
         return $next($request);
     }

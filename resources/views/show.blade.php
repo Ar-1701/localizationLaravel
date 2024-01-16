@@ -88,28 +88,50 @@
 </head>
 
 <body>
+
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url('show_post') }}">Show Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/') }}">show By Language</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('add_post') }}">Add Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1>Hello, Localization! {{ Session::get('lang') }}</h1>
+
+                <h1>Hello, Localization! {{ Session::get('lang') }} {{ App::currentLocale() }}</h1>
             </div>
             <div class="col-md-2">
                 <a href="{{ url('add_post') }}" class="btn btn-primary">Add Post</a>
             </div>
             <div class="col-md-2">
                 <form>
-                    @csrf
                     <select class="form-select" id='lang' name="lang" onchange="langs()">
                         @foreach ($lang as $lang)
                             @if (Session::get('lang') == $lang->lang)
-                                <option selected value="{{ $lang->lang }}">{{ $lang->lang }}</option>
+                                <option selected value="{{ $lang->id }}">{{ $lang->lang }}</option>
                             @else
-                                <option value="{{ $lang->lang }}">{{ $lang->lang }}</option>
+                                <option value="{{ $lang->id }}">{{ $lang->lang }}</option>
                             @endif
                         @endforeach
                     </select>
                 </form>
             </div>
+
         </div>
     </div>
 
@@ -142,18 +164,19 @@
     <script>
         function langs() {
             var lang = $("#lang").val();
+            // alert(lang)
             $.ajax({
                 url: "{{ url('langs') }}",
                 type: "post",
                 data: {
-                    lang: lang,
+                    lang_id: lang,
                     _token: "{{ @csrf_token() }}"
                 },
                 success: function(data) {
-                    // let obj = JSON.parse(data)    
+                    // let obj = JSON.parse(data)
                     // $("#postTitle").html(data.word);
-                    // location.reload();
-                    console.log(data)
+                    location.reload();
+                    // console.log(data)
                 }
             });
         }
