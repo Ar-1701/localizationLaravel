@@ -102,8 +102,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('add_post') }}">Add Post</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    <li>
+                        @include('lang')
                     </li>
                 </ul>
             </div>
@@ -113,24 +113,9 @@
         <div class="row">
             <div class="col-md-6">
 
-                <h1>Hello, Localization! {{ Session::get('lang') }} {{ App::currentLocale() }}</h1>
+                <h1>{{ __('text.heading') }}</h1>
             </div>
-            <div class="col-md-2">
-                <a href="{{ url('add_post') }}" class="btn btn-primary">Add Post</a>
-            </div>
-            <div class="col-md-2">
-                <form>
-                    <select class="form-select" id='lang' name="lang" onchange="langs()">
-                        @foreach ($lang as $lang)
-                            @if (Session::get('lang') == $lang->lang)
-                                <option selected value="{{ $lang->id }}">{{ $lang->lang }}</option>
-                            @else
-                                <option value="{{ $lang->id }}">{{ $lang->lang }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </form>
-            </div>
+
 
         </div>
     </div>
@@ -156,31 +141,10 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-    <script>
-        function langs() {
-            var lang = $("#lang").val();
-            // alert(lang)
-            $.ajax({
-                url: "{{ url('langs') }}",
-                type: "post",
-                data: {
-                    lang_id: lang,
-                    _token: "{{ @csrf_token() }}"
-                },
-                success: function(data) {
-                    // let obj = JSON.parse(data)
-                    // $("#postTitle").html(data.word);
-                    location.reload();
-                    // console.log(data)
-                }
-            });
-        }
-    </script>
+
 </body>
 
 </html>

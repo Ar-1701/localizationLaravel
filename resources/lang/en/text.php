@@ -1,4 +1,5 @@
 <?php
 return [
-    'postTitle' => 'Our Post'
+    'postTitle' => 'Our Post',
+    'heading' => 'Hello Localization'
 ];

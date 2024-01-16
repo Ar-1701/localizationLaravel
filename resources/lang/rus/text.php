@@ -1,4 +1,5 @@
 <?php
 return [
-    'postTitle' => 'Наш пост'
+    'postTitle' => 'Наш пост',
+    'heading' => 'Привет, локализация'
 ];
