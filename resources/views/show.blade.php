@@ -93,14 +93,15 @@
         <div class="row">
             <div class="col">
                 <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url('show_post') }}">Show Post</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/') }}">show By Language</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('add_post') }}">Add Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('posts') }}">All Post</a>
                     </li>
                     <li>
                         @include('lang')
@@ -130,9 +131,9 @@
                             <div class="card">
                                 <img src="{{ asset('public/upload/post/' . $row->post_img) }}" alt="Jane">
                                 <div class="container mt-2">
-                                    <h2>{{ $row->post_title }}</h2>
+                                    <h2>{{ substr($row->post_title, 0, 50)."..." }}</h2>
                                     <p class="title">{{ $row->post_cat }}</p>
-                                    <p>{{ $row->post_desc }}</p>
+                                    <p>{{ substr($row->post_desc, 0, 100) }}</p>
                                 </div>
                             </div>
                         </div>

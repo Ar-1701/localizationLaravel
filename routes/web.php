@@ -25,9 +25,9 @@ Route::controller(LocalizationController::class)->group(function () {
         Route::get("/", "index");
         Route::get("add_post", "add_post");
         Route::post('langs', 'lang');
-        Route::get('show_post', 'show_post')->name('show_post');
         Route::get('posts', 'posts')->name('posts');
         Route::post('save_post', 'save_post');
+        Route::get('delete', 'delete');
     });
 });
 // Route::get('/{locale}', function ($locale) {

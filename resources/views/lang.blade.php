@@ -1,7 +1,9 @@
 <select class="form-select" id='lang' name="lang" onchange="langs()">
     @foreach ($lang as $lang)
-        @if (Session::get('lang') == $lang->lang)
-            <option selected value="{{ $lang->id }}">{{ $lang->lang }}</option>
+        @if (Session::get('lang') == $lang->langCode)
+            <option selected value="{{ $lang->id }}">
+                <img src="{{ asset('public/upload/post/1705402230menu-02.jpg') }}" alt="">{{ $lang->lang }}
+            </option>
         @else
             <option value="{{ $lang->id }}">{{ $lang->lang }}</option>
         @endif

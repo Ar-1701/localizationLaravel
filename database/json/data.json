@@ -1,1 +1,6 @@
-[{ "lang": "en" }, { "lang": "hi" }, { "lang": "rus" }, { "lang": "es" }]
+[
+    { "langCode": "en", "lang": "English" },
+    { "langCode": "hi", "lang": "Hindi" },
+    { "langCode": "rus", "lang": "Russian" },
+    { "langCode": "es", "lang": "Spanish" }
+]

@@ -17,7 +17,10 @@ class LanguageSeeder extends Seeder
         $json = File::get('database/json/data.json');
         $language = collect(json_decode($json));
         $language->each(function ($lang) {
-            Language::Create(['lang' => $lang->lang]);
+            Language::Create([
+                'langCode' => $lang->langCode,
+                'lang' => $lang->lang
+            ]);
         });
     }
 }

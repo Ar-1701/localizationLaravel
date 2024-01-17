@@ -27,7 +27,7 @@ class LocaleMiddle
             App::setLocale(App::currentLocale());
             $l = Language::whereRaw('lang=?', App::currentLocale())->first();
             Session::put('langId', $l->id);
-            Session::put('lang', $l->lang);
+            Session::put('lang', $l->langCode);
         }
         return $next($request);
     }

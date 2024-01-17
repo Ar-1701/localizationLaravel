@@ -19,15 +19,28 @@ class LocalizationController extends Controller
         $data['post'] = Post::whereRaw('language_id=?', $langId)->get();
         return view('show', $data);
     }
+    // public function add_post(Request $req)
+    // {
+    //     $id = $req->id;
+    //     $lang_id = $req->lang_id;
+    //     $post_id = $req->post_id;
+    //     $data['singleLang'] = Language::where(['id' => $lang_id])->get();
+    //     // echo "<pre>";
+    //     // print_r($data['singleLang']);
+    //     $data['singleData'] = Post::find($id);
+    //     $data['lang'] = Language::all();
+    //     return view('add', $data);
+    // }
     public function add_post(Request $req)
     {
         $id = $req->id;
         $lang_id = $req->lang_id;
         $post_id = $req->post_id;
-        $data['singleLang'] = Language::where(['id' => $lang_id])->get();
+        // $data['singleData'] = Post::whereRaw('post_id=?', [$post_id])->get();
+        $data['singleData'] = Post::with('language')->whereRaw('post_id=?', [$post_id])->get();
         // echo "<pre>";
-        // print_r($data['singleLang']);
-        $data['singleData'] = Post::find($id);
+        // print_r($d);
+        // die;
         $data['lang'] = Language::all();
         return view('add', $data);
     }
@@ -35,7 +48,8 @@ class LocalizationController extends Controller
     {
         // echo "<pre>";
         // print_r($req->all());
-        // die;
+        // echo "</pre>";
+
         $id = $req->id;
         $lang_id = $req->locale;
         $title = $req->title;
@@ -53,53 +67,108 @@ class LocalizationController extends Controller
             $imgName = $req->old_img;
         }
         if (isset($u)) {
-            $u->post_title = $title;
-            $u->post_cat = $post_cat;
-            $u->post_desc = $post_desc;
-            $u->post_img = $imgName;
-            $u->save();
+            foreach ($req->locale as $key => $l) {
+                $id = $req->id[$key];
+                $title = $req->title[$key];
+                $post_cat = $req->post_cat[$key];
+                $post_desc = $req->post_desc[$key];
+                $i = Post::find($id);
+                $i->post_title = $title;
+                $i->post_cat = $post_cat;
+                $i->post_desc = $post_desc;
+                $i->post_img = $imgName;
+                $i->save();
+            }
             echo "update";
         } else {
             $post_id = "P" . rand(1111, 9999);
             foreach ($req->locale as $key => $l) {
-                $language = Language::whereIn('id', $req->locale)->get();
-                foreach ($language as $l) {
-                    // echo "<pre>";
-                    // print_r($language);
-                    // // die;
-                    $lang_id = $lang_id[$key];
-                    $title = $title[$key];
-                    $post_cat = $post_cat[$key];
-                    $post_desc = $post_desc[$key];
-                    $i = new Post();
-                    $i->post_id = $post_id;
-                    $i->post_title = $title;
-                    $i->post_cat = $post_cat;
-                    $i->post_desc = $post_desc;
-                    $i->post_img = $imgName;
-                    $l->lang->posts()->save($i);
-                    // $image->move("public/upload/post", $imgName);
-                }
+                $l = Language::find($req->locale[$key]);
+                $lang_id = $req->locale[$key];
+                $title = $req->title[$key];
+                $post_cat = $req->post_cat[$key];
+                $post_desc = $req->post_desc[$key];
+                $i = new Post();
+                $i->post_id = $post_id;
+                $i->language_id = $lang_id;
+                $i->post_title = $title;
+                $i->post_cat = $post_cat;
+                $i->post_desc = $post_desc;
+                $i->post_img = $imgName;
+                $l->posts()->save($i);
             }
+            $image->move("public/upload/post", $imgName);
             echo "save";
         }
     }
+    public function delete(Request $req)
+    {
+        echo $id = $req->id;
+        echo $lang_id = $req->lang_id;
+        echo $post_id = $req->post_id;
+        $d = Post::whereRaw('post_id=?', $post_id)->delete();
+        return redirect('/');
+    }
+    // public function save_post(Request $req)
+    // {
+    //     $id = $req->id;
+    //     $lang_id = $req->locale;
+    //     $title = $req->title;
+    //     $post_cat = $req->post_cat;
+    //     $post_desc = $req->post_desc;
+    //     $u = Post::find($id);
+    //     if ($req->hasFile('img')) {
+    //         $image = $req->file('img');
+    //         $imgName = time() . $image->getClientOriginalName();
+    //         if (isset($u)) {
+    //             File::delete(public_path('upload/post/' . $imgName));
+    //             $image->move("public/upload/post", $imgName);
+    //         }
+    //     } else {
+    //         $imgName = $req->old_img;
+    //     }
+    //     if (isset($u)) {
+    //         foreach ($req->locale as $key => $l) {
+    //             $id = $req->id[$key];
+    //             $title = $req->title[$key];
+    //             $post_cat = $req->post_cat[$key];
+    //             $post_desc = $req->post_desc[$key];
+    //             $i = Post::find($id);
+    //             $i->post_title = $title;
+    //             $i->post_cat = $post_cat;
+    //             $i->post_desc = $post_desc;
+    //             $i->post_img = $imgName;
+    //             $i->save();
+    //         }
+    //         echo "update";
+    //     } else {
+    //         $post_id = "P" . rand(1111, 9999);
+    //         foreach ($req->locale as $key => $l) {
+    //             $lang_id = $req->locale[$key];
+    //             $title = $req->title[$key];
+    //             $post_cat = $req->post_cat[$key];
+    //             $post_desc = $req->post_desc[$key];
+    //             $i = new Post();
+    //             $i->post_id = $post_id;
+    //             $i->language_id = $lang_id;
+    //             $i->post_title = $title;
+    //             $i->post_cat = $post_cat;
+    //             $i->post_desc = $post_desc;
+    //             $i->post_img = $imgName;
+    //             $i->save();
+    //         }
+    //         $image->move("public/upload/post", $imgName);
+    //         echo "save";
+    //     }
+    // }
+
     public function lang(Request $req)
     {
         $langId = $req->lang_id;
         $lang = Language::find($langId);
         App::setLocale($lang->lang);
         Session::put('langId', $langId);
-        Session::put('lang', $lang->lang);
-    }
-    public function show_post(Post $post)
-    {
-        // echo "<pre>";
-        // print_r($post->all());
-        // echo "</pre>";
-        $data['lang'] = $this->language();
-        $data['post'] = $post->where('language_id', Session::get('langId'))->get();
-        return view('showPost', $data);
+        Session::put('lang', $lang->langCode);
     }
     public function language()
     {
@@ -108,13 +177,21 @@ class LocalizationController extends Controller
     public function posts(Post $post)
     {
         $data['lang'] = $this->language();
-        $pid = DB::select('select distinct post_id from posts');
-        $pidss = [];
-        foreach ($pid as $pids) {
-            $pidss[] = $pids->post_id;
+        $post = Post::whereRaw('language_id=?', Session::get('langId'))->get();
+        $all_array = array();
+        foreach ($post as $val) {
+            $arr['id'] = $val->id;
+            $arr['post_id'] = $val->post_id;
+            $arr['language_id'] = $val->language_id;
+            $arr['post_title'] = $val->post_title;
+            $arr['post_cat'] = $val->post_cat;
+            $arr['post_desc'] = $val->post_desc;
+            $arr['post_img'] = $val->post_img;
+            if (!in_array($arr['post_id'], array_column($all_array, 'post_id'))) {
+                array_push($all_array, $arr);
+            }
         }
-        $data['post'] = Post::whereIn('post_id', $pidss)->where('language_id', Session::get('langId'))->get();
-        // dd($data['post'][0]->post_id);
+        $data['post'] = $all_array;
         return view('post', $data);
     }
 }
