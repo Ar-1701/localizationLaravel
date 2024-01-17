@@ -27,6 +27,7 @@ Route::controller(LocalizationController::class)->group(function () {
         Route::post('langs', 'lang');
         Route::get('posts', 'posts')->name('posts');
         Route::post('save_post', 'save_post');
+        Route::post('loadData', 'loadData');
         Route::get('delete', 'delete');
     });
 });

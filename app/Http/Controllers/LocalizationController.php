@@ -16,7 +16,7 @@ class LocalizationController extends Controller
     {
         $langId = Session::get('langId');
         $data['lang'] = $this->language();
-        $data['post'] = Post::whereRaw('language_id=?', $langId)->get();
+        $data['post'] = Post::whereRaw('language_id=?', $langId)->limit(1)->get();
         return view('show', $data);
     }
     // public function add_post(Request $req)
@@ -193,5 +193,40 @@ class LocalizationController extends Controller
         }
         $data['post'] = $all_array;
         return view('post', $data);
+    }
+    public function loadData(Request $req)
+    {
+        $limit = 3;
+        if (isset($req->page)) {
+            $page = $req->page;
+        } else {
+            $page = 0;
+        }
+        $post = DB::select('select * from posts limit ? offset ?', [$limit, $page]);
+        if (!empty($post)) {
+            $str = "";
+            foreach ($post as $row) {
+                $pid = $row->id;
+                $str .= "<div class='column'>
+            <div class='card'>                
+            <img src='" .  asset("public/upload/post/" . $row->post_img) . "' alt='Jane'>
+            <div class='container mt-2'>
+            <h2> $row->post_title </h2>
+            <p class='title'>  $row->post_cat  </p>
+            <p> $row->post_desc </p>
+            </div>
+            </div>
+            </div>";
+            }
+            $str .= "<div class='col-md-12 text-center mb-2 btnBox'>
+             <button class='btn btn-success w-25 text-center loadBtns' id='loadBtn'
+            data-id='$pid' onclick='loadBtn()'>Load More</button>
+            </div>";
+            // $req = ["pid" => $pid, "data" => $str];
+            echo $str;
+            // echo json_encode($req);
+        } else {
+            echo "";
+        }
     }
 }
